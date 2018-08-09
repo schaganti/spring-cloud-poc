@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TollRestController {
 
-	@RequestMapping("/getTollData")
+	@RequestMapping("/tolldata")
 	public List<TollUsage> getTollData() {
 
 		return Arrays.asList(new TollUsage("1", "station1", "license1", "ts1"),
