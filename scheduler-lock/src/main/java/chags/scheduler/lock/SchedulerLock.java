@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SchedulerLock {
 
-	String name() default "schedulerLock";
+	String name();
 	long maxWaitTime() default 0;
 	String lockRegistryBean() default "";
 }

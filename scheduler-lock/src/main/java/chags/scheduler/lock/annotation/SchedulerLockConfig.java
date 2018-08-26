@@ -1,9 +1,8 @@
-package chags.scheduler.lock.config;
+package chags.scheduler.lock.annotation;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.support.locks.DefaultLockRegistry;
 import org.springframework.integration.support.locks.LockRegistry;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -27,10 +26,4 @@ public class SchedulerLockConfig {
 	public SynchronizedRunnableMapper synchronizedRunnerMapper(LockRegistry lockRegistry, ApplicationContext applicationContext) {
 		return new SynchronizedRunnableMapper(lockRegistry, applicationContext);
 	}
-
-	@Bean
-	public LockRegistry lockRegistry() {
-		return new DefaultLockRegistry();
-	}
-
 }

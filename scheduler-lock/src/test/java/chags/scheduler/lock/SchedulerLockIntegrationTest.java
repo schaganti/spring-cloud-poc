@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.support.locks.DefaultLockRegistry;
 import org.springframework.integration.support.locks.LockRegistry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,12 +16,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import chags.scheduler.lock.config.SchedulerLockConfig;
+import chags.scheduler.lock.annotation.EnableJdbcSchedulerLocking;
+import chags.scheduler.lock.annotation.EnableRedisSchedulerLocking;
+import chags.scheduler.lock.annotation.EnableSchedulerLocking;
+import chags.scheduler.lock.annotation.SchedulerLockConfig;
 import lombok.Data;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes={SchedulerLockConfig.class, SchedulerLockIntegrationTest.TestConfig.class})
+@ContextConfiguration(classes={SchedulerLockIntegrationTest.TestConfig.class})
 public class SchedulerLockIntegrationTest {
 
 	@Autowired
@@ -32,19 +36,20 @@ public class SchedulerLockIntegrationTest {
 	@Test
 	@DirtiesContext
 	public void schedulerShouldRunTheJob() throws InterruptedException {
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 		assertThat(testScheduledJob.getInvocationCount()).isGreaterThan(0);
 	}
 	
 	@Test
 	public void schedulerShouldSkipTheJob() throws InterruptedException {
 		lockRegistry.obtain(TestScheduledJob.TEST_LOCK).lock();
-		Thread.sleep(10000);
+		Thread.sleep(5000);
 		assertThat(testScheduledJob.getInvocationCount()).isEqualTo(0);
 	}
 	
 	@Configuration
 	@EnableScheduling
+	@EnableJdbcSchedulerLocking(tablePrefix="INT_", region="dsf", timeToLive=10000)
 	public static class TestConfig {
 
 		@Bean
