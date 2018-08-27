@@ -11,7 +11,7 @@ import org.springframework.integration.support.locks.DefaultLockRegistry;
 import org.springframework.integration.support.locks.LockRegistry;
 
 @Configuration
-public class JdbcSchedulerLockConfig extends SchedulerLockConfig implements ImportAware{
+public class JdbcSchedulerLockConfig extends SchedulerLockConfig implements ImportAware {
 
 	@Bean
 	public LockRegistry lockRegistry() {
